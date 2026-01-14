@@ -1,19 +1,20 @@
 using UnityEngine;
 using UnityEngine.PostProcessing;
+using MinAttr = UnityEngine.MinAttribute;
 
 namespace UnityEditor.PostProcessing
 {
-    [CustomPropertyDrawer(typeof(MinAttribute))]
+    [CustomPropertyDrawer(typeof(MinAttr))]
     sealed class MinDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            MinAttribute attribute = (MinAttribute)base.attribute;
+            MinAttr attribute = (MinAttr)base.attribute;
 
             if (property.propertyType == SerializedPropertyType.Integer)
             {
                 int v = EditorGUI.IntField(position, label, property.intValue);
-                property.intValue = (int)Mathf.Max(v, attribute.min);
+                property.intValue = Mathf.Max(v, (int)attribute.min);
             }
             else if (property.propertyType == SerializedPropertyType.Float)
             {
