@@ -208,8 +208,11 @@ public class MonsterAI : MonoBehaviour
             return;
         }
 
-        // Keep playing the same chase animation (don't change it)
-        if (currentAnimation != currentChaseAnimation)
+        // Keep the chase animation looping - check if it's finished and restart it
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // If animation has finished playing, restart it
+        if (stateInfo.normalizedTime >= 1.0f && !animator.IsInTransition(0))
         {
             ForcePlayAnimation(currentChaseAnimation);
         }
@@ -236,6 +239,15 @@ public class MonsterAI : MonoBehaviour
             // Made it back home
             TransitionToIdle();
             return;
+        }
+
+        // Keep walk animation looping
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // If animation has finished playing, restart it (keeps same walk animation)
+        if (stateInfo.normalizedTime >= 1.0f && !animator.IsInTransition(0))
+        {
+            animator.Play(currentAnimation, 0, 0f);
         }
 
         // Keep rotating towards start
