@@ -76860,7 +76860,7 @@ GameObject:
   - component: {fileID: 594515552}
   - component: {fileID: 594515551}
   - component: {fileID: 594515550}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76882,7 +76882,7 @@ TerrainCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 2
   m_TerrainData: {fileID: 15600000, guid: 3067f4c4673ebb049b67c5cadc9ef499, type: 2}
@@ -132237,7 +132237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3490026887102541896, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.45
+      value: 16.81
       objectReference: {fileID: 0}
     - target: {fileID: 3490026887102541896, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -132280,7 +132280,10 @@ PrefabInstance:
       addedObject: {fileID: 1050176947}
     - targetCorrespondingSourceObject: {fileID: 3490026887102114920, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1050176950}
+      addedObject: {fileID: 1050176953}
+    - targetCorrespondingSourceObject: {fileID: 3490026887102114920, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1050176956}
   m_SourcePrefab: {fileID: 100100000, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
 --- !u!1 &1050176946 stripped
 GameObject:
@@ -132309,12 +132312,13 @@ MonoBehaviour:
     m_Bits: 64
   chaseSpeed: 5
   rotationSpeed: 5
-  attackRange: 1.8
-  attackCooldown: 2
+  attackRange: 2.39
+  attackCooldown: 1.68
   attackDamage: 10
-  idleAnimationLength: 3
+  idleAnimationLength: 10
   showDebugInfo: 1
---- !u!54 &1050176950
+  showGizmos: 1
+--- !u!54 &1050176953
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132341,6 +132345,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &1050176956
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050176946}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.0640197
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9078908, z: 0}
 --- !u!4 &1050287309 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 416718, guid: 601b7f10102e66b41b534b7b077bd9a0, type: 3}
@@ -224442,8 +224469,8 @@ GameObject:
   - component: {fileID: 1780305043}
   - component: {fileID: 1780305048}
   m_Layer: 3
-  m_Name: FpsController
-  m_TagString: Untagged
+  m_Name: Player
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -224552,7 +224579,7 @@ Transform:
   m_GameObject: {fileID: 1780305042}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 456.03232, y: 28.991, z: 153.82904}
+  m_LocalPosition: {x: 489.8, y: 28.991, z: 417.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
