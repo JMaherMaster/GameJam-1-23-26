@@ -2,6 +2,12 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+
+Game Jam 1-23-26/Library/
+Game Jam 1-23-26/Temp/
+Game Jam 1-23-26/Obj/
+Game Jam 1-23-26/UserSettings/
+
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
