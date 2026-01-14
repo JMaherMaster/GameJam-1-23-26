@@ -21,6 +21,8 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] private float attackRange = 2.5f;
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private int attackDamage = 10;
+    [SerializeField] private float attackAnimationLength = 1.5f; // Total length of attack animation
+    [SerializeField] private float damageAtPercent = 0.5f; // When to apply damage (0.5 = halfway through)
 
     [Header("Idle Settings")]
     [SerializeField] private float idleAnimationLength = 3f;
@@ -208,13 +210,19 @@ public class MonsterAI : MonoBehaviour
             return;
         }
 
-        // Keep the chase animation looping - check if it's finished and restart it
+        // FORCE the chase animation to keep playing/looping
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // If animation has finished playing, restart it
-        if (stateInfo.normalizedTime >= 1.0f && !animator.IsInTransition(0))
+        // Check if we're playing the correct animation
+        if (!stateInfo.IsName(currentChaseAnimation))
         {
+            // Not playing the right animation, force it
             ForcePlayAnimation(currentChaseAnimation);
+        }
+        else if (stateInfo.normalizedTime >= 0.95f)
+        {
+            // Animation is almost done, loop it back to start
+            animator.Play(currentChaseAnimation, 0, 0f);
         }
 
         // Rotate towards player
@@ -241,11 +249,11 @@ public class MonsterAI : MonoBehaviour
             return;
         }
 
-        // Keep walk animation looping
+        // FORCE walk animation to keep playing/looping
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // If animation has finished playing, restart it (keeps same walk animation)
-        if (stateInfo.normalizedTime >= 1.0f && !animator.IsInTransition(0))
+        // Check if animation is almost done, loop it
+        if (stateInfo.normalizedTime >= 0.95f)
         {
             animator.Play(currentAnimation, 0, 0f);
         }
@@ -337,10 +345,16 @@ public class MonsterAI : MonoBehaviour
         string randomAttack = attackAnimations[Random.Range(0, attackAnimations.Length)];
         ForcePlayAnimation(randomAttack);
 
-        // Wait for damage frame
-        yield return new WaitForSeconds(0.6f);
+        if (showDebugInfo)
+        {
+            Debug.Log($"<color=orange>Attacking with {randomAttack}</color>");
+        }
 
-        // Deal damage if still in range
+        // Wait until the damage point in the animation (e.g., halfway through)
+        float damageDelay = attackAnimationLength * damageAtPercent;
+        yield return new WaitForSeconds(damageDelay);
+
+        // Apply damage if player is still in range and visible
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         if (distanceToPlayer <= attackRange && canSeePlayer)
         {
@@ -348,11 +362,21 @@ public class MonsterAI : MonoBehaviour
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(attackDamage);
+
+                if (showDebugInfo)
+                {
+                    Debug.Log($"<color=red>DAMAGE DEALT! {attackDamage} damage to player</color>");
+                }
             }
         }
+        else if (showDebugInfo)
+        {
+            Debug.Log("<color=yellow>Attack missed - player out of range</color>");
+        }
 
-        // Wait for attack cooldown
-        yield return new WaitForSeconds(attackCooldown);
+        // Wait for rest of animation + cooldown
+        float remainingTime = attackAnimationLength * (1f - damageAtPercent);
+        yield return new WaitForSeconds(remainingTime + attackCooldown);
 
         isPlayingAnimation = false;
     }
