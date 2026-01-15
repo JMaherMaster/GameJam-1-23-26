@@ -13,6 +13,7 @@ public class PlayerHealth : MonoBehaviour
     public Image healthFill;
     public Image damageOverlay; // Red flash overlay
     public Image lowHealthOverlay; // Permanent low health vignette
+    public GameObject deathScreen; // Death UI panel
 
     [Header("Health Bar Colors")]
     public Color fullHealthColor = Color.green;
@@ -30,12 +31,19 @@ public class PlayerHealth : MonoBehaviour
     public Color vignetteAt0Health = new Color(0.2f, 0f, 0f, 0.7f);  // Very dark red at 0 HP
     public float vignetteFadeSpeed = 2f; // How fast the vignette fades in/out
 
+    [Header("Death Settings")]
+    public float deathFadeDuration = 2f; // How long the death fade takes
+    public Color deathFadeColor = new Color(0.1f, 0f, 0f, 1f); // Almost black red
+
+    private bool isDead = false;
+
     [Header("Debug")]
     public bool showDebugLogs = true;
 
     void Awake()
     {
         currentHealth = maxHealth;
+        isDead = false;
         UpdateHealthBar();
 
         // Make sure damage overlay starts invisible
@@ -53,6 +61,12 @@ public class PlayerHealth : MonoBehaviour
             lowHealthOverlay.color = transparent;
         }
 
+        // Make sure death screen is hidden
+        if (deathScreen != null)
+        {
+            deathScreen.SetActive(false);
+        }
+
         if (showDebugLogs)
         {
             Debug.Log($"<color=cyan>[PLAYER HEALTH] Initialized - Health: {currentHealth}/{maxHealth}</color>");
@@ -61,8 +75,11 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        // Update low health vignette
-        UpdateLowHealthVignette();
+        // Update low health vignette (only if not dead)
+        if (!isDead)
+        {
+            UpdateLowHealthVignette();
+        }
 
         // Monitor for unexpected health changes
         if (showDebugLogs)
@@ -76,9 +93,11 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isDead) return; // Can't take damage when dead
+
         int previousHealth = currentHealth;
         currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, -100, maxHealth); // Allow negative for death
 
         if (showDebugLogs)
         {
@@ -87,13 +106,14 @@ public class PlayerHealth : MonoBehaviour
 
         UpdateHealthBar();
 
-        // Trigger damage flash effect
-        if (damageOverlay != null)
+        // Trigger damage flash effect (only if not dead)
+        if (damageOverlay != null && currentHealth > 0)
         {
             StartCoroutine(DamageFlashEffect());
         }
 
-        if (currentHealth <= 0)
+        // Check for death (below 0, not at 0)
+        if (currentHealth < 0)
         {
             Die();
         }
@@ -101,7 +121,7 @@ public class PlayerHealth : MonoBehaviour
 
     void UpdateHealthBar()
     {
-        float healthPercent = (float)currentHealth / maxHealth;
+        float healthPercent = Mathf.Clamp01((float)currentHealth / maxHealth);
 
         if (healthSlider != null)
         {
@@ -176,8 +196,45 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        if (isDead) return;
+
+        isDead = true;
         Debug.Log("<color=red>[PLAYER HEALTH] PLAYER DIED!</color>");
-        // Add death logic
+
+        // Start death sequence
+        StartCoroutine(DeathSequence());
+    }
+
+    IEnumerator DeathSequence()
+    {
+        // Fade the low health overlay to very dark
+        if (lowHealthOverlay != null)
+        {
+            float elapsed = 0f;
+            Color startColor = lowHealthOverlay.color;
+
+            while (elapsed < deathFadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / deathFadeDuration;
+                lowHealthOverlay.color = Color.Lerp(startColor, deathFadeColor, t);
+                yield return null;
+            }
+
+            lowHealthOverlay.color = deathFadeColor;
+        }
+
+        // Small delay before showing death screen
+        yield return new WaitForSeconds(0.5f);
+
+        // Show death screen
+        if (deathScreen != null)
+        {
+            deathScreen.SetActive(true);
+        }
+
+        // Optional: Disable player controls here
+        // GetComponent<PlayerController>()?.enabled = false;
     }
 
     void UpdateLowHealthVignette()
