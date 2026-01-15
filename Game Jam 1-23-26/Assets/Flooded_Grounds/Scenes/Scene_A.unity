@@ -152389,11 +152389,11 @@ MonoBehaviour:
   walkSpeed: 4
   rotationSpeed: 10
   returnToStartThreshold: 0.5
-  attackRange: 2.39
-  attackCooldown: 1.7
+  attackRange: 2.4
+  attackCooldown: 1.5
   attackDamage: 10
   attackAnimationLength: 1.5
-  damageAtPercent: 0.4
+  damageAtPercent: 0.3
   idleAnimationLength: 10
   showDebugInfo: 1
   showGizmos: 1

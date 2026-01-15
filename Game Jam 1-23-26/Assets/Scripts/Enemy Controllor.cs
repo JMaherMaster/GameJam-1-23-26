@@ -347,36 +347,59 @@ public class MonsterAI : MonoBehaviour
 
         if (showDebugInfo)
         {
-            Debug.Log($"<color=orange>Attacking with {randomAttack}</color>");
+            Debug.Log($"<color=orange>[MONSTER] Starting attack: {randomAttack}</color>");
         }
 
         // Wait until the damage point in the animation (e.g., halfway through)
         float damageDelay = attackAnimationLength * damageAtPercent;
         yield return new WaitForSeconds(damageDelay);
 
-        // Apply damage if player is still in range and visible
+        // Check ONE TIME if we should deal damage
+        if (player == null)
+        {
+            if (showDebugInfo) Debug.Log("<color=yellow>[MONSTER] No player found</color>");
+            isPlayingAnimation = false;
+            yield break;
+        }
+
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        if (distanceToPlayer <= attackRange && canSeePlayer)
+
+        if (showDebugInfo)
+        {
+            Debug.Log($"<color=cyan>[MONSTER] Damage check - Distance: {distanceToPlayer:F2} | Range: {attackRange} | Can see: {canSeePlayer}</color>");
+        }
+
+        // Apply damage ONLY ONCE if player is in range
+        if (distanceToPlayer <= attackRange)
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(attackDamage);
-
                 if (showDebugInfo)
                 {
-                    Debug.Log($"<color=red>DAMAGE DEALT! {attackDamage} damage to player</color>");
+                    Debug.Log($"<color=red>[MONSTER] *** DEALING {attackDamage} DAMAGE TO PLAYER ***</color>");
                 }
+
+                playerHealth.TakeDamage(attackDamage);
+            }
+            else
+            {
+                Debug.LogWarning("[MONSTER] Player has no PlayerHealth component!");
             }
         }
         else if (showDebugInfo)
         {
-            Debug.Log("<color=yellow>Attack missed - player out of range</color>");
+            Debug.Log($"<color=yellow>[MONSTER] Attack missed - player too far ({distanceToPlayer:F2} > {attackRange})</color>");
         }
 
         // Wait for rest of animation + cooldown
         float remainingTime = attackAnimationLength * (1f - damageAtPercent);
         yield return new WaitForSeconds(remainingTime + attackCooldown);
+
+        if (showDebugInfo)
+        {
+            Debug.Log("<color=green>[MONSTER] Attack complete, ready for next attack</color>");
+        }
 
         isPlayingAnimation = false;
     }
