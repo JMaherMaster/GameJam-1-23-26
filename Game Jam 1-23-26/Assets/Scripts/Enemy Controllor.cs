@@ -497,6 +497,25 @@ public class MonsterAI : MonoBehaviour
         }
     }
 
+    // Public method to be called when monster takes damage
+    public void OnTakeDamage()
+    {
+        // Force the monster to see the player and start chasing
+        canSeePlayer = true;
+
+        if (currentState == State.Idle || currentState == State.Returning)
+        {
+            StopAllCoroutines();
+            StartCoroutine(DetectionRoutine());
+            TransitionToChase();
+
+            if (showDebugInfo)
+            {
+                Debug.Log("<color=red>[MONSTER] ALERTED BY DAMAGE! Starting chase!</color>");
+            }
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
         if (!showGizmos) return;

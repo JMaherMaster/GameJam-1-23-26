@@ -38,6 +38,15 @@ public class MonsterHealth : MonoBehaviour
             Debug.Log($"<color=orange>[MONSTER HEALTH] Took {damage} damage | {previousHealth} → {currentHealth}</color>");
         }
 
+        // Turn toward the attacker (player)
+        TurnTowardPlayer();
+
+        // Alert the AI that we've been hit
+        if (monsterAI != null && !isDead)
+        {
+            monsterAI.OnTakeDamage();
+        }
+
         // Play hit reaction (if not dead)
         if (currentHealth > 0)
         {
@@ -48,6 +57,30 @@ public class MonsterHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+        }
+    }
+
+    void TurnTowardPlayer()
+    {
+        // Find player if we don't have reference
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            // Get direction to player
+            Vector3 directionToPlayer = player.transform.position - transform.position;
+            directionToPlayer.y = 0; // Keep rotation on Y axis only
+
+            // Rotate to face player
+            if (directionToPlayer != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+                transform.rotation = targetRotation;
+
+                if (showDebugLogs)
+                {
+                    Debug.Log("<color=cyan>[MONSTER] Turned toward attacker!</color>");
+                }
+            }
         }
     }
 
