@@ -27274,7 +27274,7 @@ MonoBehaviour:
   batTransform: {fileID: 1754247998}
   batWeapon: {fileID: 1754248000}
   swingDuration: 0.5
-  attackCooldown: 0.9
+  attackCooldown: 0.8
   swingCurve:
     serializedVersion: 2
     m_Curve:
@@ -258115,7 +258115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 12
-  sensitivity: 100
+  sensitivity: 200
   WaterHeight: 15.6
   cam: {fileID: 1229290729}
   webGLRightClickRotation: 1
@@ -258187,9 +258187,9 @@ MonoBehaviour:
   damageOverlay: {fileID: 1262617807}
   lowHealthOverlay: {fileID: 1610270110}
   deathScreen: {fileID: 2081250435}
-  fullHealthColor: {r: 0.20191525, g: 0.5169811, b: 0.20191525, a: 1}
-  midHealthColor: {r: 0.39988115, g: 0.554717, b: 0.13292272, a: 0}
-  lowHealthColor: {r: 0.4867924, g: 0.12986596, b: 0.116646454, a: 1}
+  fullHealthColor: {r: 0.20191525, g: 0.5169811, b: 0.20191525, a: 0.9019608}
+  midHealthColor: {r: 0.3379398, g: 0.5320754, b: 0, a: 0.9411765}
+  lowHealthColor: {r: 0.4867924, g: 0.12986596, b: 0.116646454, a: 0.98039216}
   flashDuration: 0.3
   flashColor: {r: 0.6981132, g: 0.0250266, b: 0.0250266, a: 0.3}
   lowHealthThreshold: 20
