@@ -258357,7 +258357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 12
-  sensitivity: 250
+  sensitivity: 300
   WaterHeight: 15.6
   cam: {fileID: 1229290729}
   webGLRightClickRotation: 1
