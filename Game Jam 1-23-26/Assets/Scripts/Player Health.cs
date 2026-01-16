@@ -274,4 +274,9 @@ public class PlayerHealth : MonoBehaviour
     {
         return currentHealth;
     }
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
 }
