@@ -6,15 +6,10 @@ public class HoldMapUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            mapUI.SetActive(true);
-        }
-        if (Input.GetKey(KeyCode.RightShift))
-        {
-            mapUI.SetActive(true);
-        }
-        if (Input.GetKey(KeyCode.Return))
+        // Show map if ANY of these keys are held
+        if (Input.GetKey(KeyCode.LeftShift) ||
+            Input.GetKey(KeyCode.RightShift) ||
+            Input.GetKey(KeyCode.Return))
         {
             mapUI.SetActive(true);
         }
