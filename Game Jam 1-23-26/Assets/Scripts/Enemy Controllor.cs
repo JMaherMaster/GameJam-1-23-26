@@ -21,8 +21,11 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] private float attackRange = 2.5f;
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private int attackDamage = 10;
-    [SerializeField] private float attackAnimationLength = 1.5f; // Total length of attack animation
-    [SerializeField] private float damageAtPercent = 0.5f; // When to apply damage (0.5 = halfway through)
+    [SerializeField] private float attackAnimationLength = 1.5f;
+    [SerializeField] private float damageAtPercent = 0.5f;
+
+    [Header("Hitstun Settings")]
+    [SerializeField] private float hitstunDuration = 0.8f; // How long to pause attack when hit
 
     [Header("Idle Settings")]
     [SerializeField] private float idleAnimationLength = 3f;
@@ -46,6 +49,10 @@ public class MonsterAI : MonoBehaviour
     private string currentAnimation = "";
     private string currentChaseAnimation = "";
     private bool hasLostPlayer = false;
+
+    // Hitstun tracking
+    private bool isStunned = false;
+    private Coroutine attackCoroutine = null;
 
     // Animation state names
     private string[] idleAnimations = { "idle1", "idle2", "idle3", "idle4" };
@@ -105,7 +112,7 @@ public class MonsterAI : MonoBehaviour
         if (showDebugInfo)
         {
             float dist = player != null ? Vector3.Distance(transform.position, player.position) : 0f;
-            Debug.Log($"[MONSTER] State: {currentState} | See: {canSeePlayer} | Dist: {dist:F1} | Anim: {currentAnimation}");
+            Debug.Log($"[MONSTER] State: {currentState} | See: {canSeePlayer} | Dist: {dist:F1} | Anim: {currentAnimation} | Stunned: {isStunned}");
         }
     }
 
@@ -330,10 +337,10 @@ public class MonsterAI : MonoBehaviour
         // Keep facing player
         RotateTowardsPlayer();
 
-        // Perform attack if not already attacking
-        if (!isPlayingAnimation)
+        // Perform attack if not already attacking and not stunned
+        if (!isPlayingAnimation && !isStunned)
         {
-            StartCoroutine(PerformAttack());
+            attackCoroutine = StartCoroutine(PerformAttack());
         }
     }
 
@@ -402,6 +409,7 @@ public class MonsterAI : MonoBehaviour
         }
 
         isPlayingAnimation = false;
+        attackCoroutine = null;
     }
 
     void PlayRandomIdleAnimation()
@@ -513,6 +521,39 @@ public class MonsterAI : MonoBehaviour
             {
                 Debug.Log("<color=red>[MONSTER] ALERTED BY DAMAGE! Starting chase!</color>");
             }
+        }
+
+        // Apply hitstun - pause attack timer
+        if (currentState == State.Attacking && !isStunned)
+        {
+            StartCoroutine(ApplyHitstun());
+        }
+    }
+
+    IEnumerator ApplyHitstun()
+    {
+        isStunned = true;
+
+        if (showDebugInfo)
+        {
+            Debug.Log($"<color=magenta>[MONSTER] STUNNED! Attack paused for {hitstunDuration}s</color>");
+        }
+
+        // Pause the attack coroutine if it's running
+        if (attackCoroutine != null && isPlayingAnimation)
+        {
+            // The attack coroutine will naturally wait, but we prevent new attacks
+            // by setting isStunned = true
+        }
+
+        // Wait for hitstun duration
+        yield return new WaitForSeconds(hitstunDuration);
+
+        isStunned = false;
+
+        if (showDebugInfo)
+        {
+            Debug.Log("<color=cyan>[MONSTER] Hitstun ended, resuming attack</color>");
         }
     }
 

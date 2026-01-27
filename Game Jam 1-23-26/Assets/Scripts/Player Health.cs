@@ -227,6 +227,10 @@ public class PlayerHealth : MonoBehaviour
         // Small delay before showing death screen
         yield return new WaitForSeconds(0.5f);
 
+        // Unlock and show cursor for menu
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         // Show death screen
         if (deathScreen != null)
         {
@@ -268,6 +272,22 @@ public class PlayerHealth : MonoBehaviour
 
         // Smoothly lerp to target color
         lowHealthOverlay.color = Color.Lerp(lowHealthOverlay.color, targetColor, Time.deltaTime * vignetteFadeSpeed);
+    }
+
+    public void GainHealth(int amount)
+    {
+        if (isDead) return; // Can't gain health when dead
+
+        int previousHealth = currentHealth;
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Cap at max health
+
+        if (showDebugLogs)
+        {
+            Debug.Log($"<color=green>[PLAYER HEALTH] Gained {amount} health | {previousHealth} → {currentHealth}</color>");
+        }
+
+        UpdateHealthBar();
     }
 
     public int GetCurrentHealth()

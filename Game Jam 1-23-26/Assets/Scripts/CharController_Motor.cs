@@ -20,7 +20,6 @@ public class CharController_Motor : MonoBehaviour
 
     void Start()
     {
-        //LockCursor ();
         character = GetComponent<CharacterController>();
         if (Application.isEditor)
         {
@@ -30,6 +29,10 @@ public class CharController_Motor : MonoBehaviour
 
         // Find player health
         playerHealth = FindFirstObjectByType<PlayerHealth>();
+
+        // Lock and hide cursor for gameplay
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
 

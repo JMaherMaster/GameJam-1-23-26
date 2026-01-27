@@ -6,6 +6,9 @@ public class MonsterHealth : MonoBehaviour
     [SerializeField] private int maxHealth = 100;
     private int currentHealth;
 
+    [Header("Player Reward")]
+    [SerializeField] private int healthRewardOnDeath = 5;
+
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
 
@@ -41,16 +44,16 @@ public class MonsterHealth : MonoBehaviour
         // Turn toward the attacker (player)
         TurnTowardPlayer();
 
-        // Alert the AI that we've been hit
-        if (monsterAI != null && !isDead)
-        {
-            monsterAI.OnTakeDamage();
-        }
-
         // Play hit reaction (if not dead)
         if (currentHealth > 0)
         {
             PlayHitReaction();
+        }
+
+        // Alert the AI that we've been hit (this applies hitstun)
+        if (monsterAI != null && !isDead)
+        {
+            monsterAI.OnTakeDamage();
         }
 
         // Check for death
@@ -112,6 +115,9 @@ public class MonsterHealth : MonoBehaviour
             Debug.Log("<color=red>[MONSTER] MONSTER DIED!</color>");
         }
 
+        // Reward the player with health
+        RewardPlayer();
+
         // Play random death animation
         string[] deathAnimations = { "death1", "death2", "death3", "death4" };
         string randomDeath = deathAnimations[Random.Range(0, deathAnimations.Length)];
@@ -138,6 +144,29 @@ public class MonsterHealth : MonoBehaviour
 
         // Optional: Destroy after some time, or leave the body
         // Destroy(gameObject, 10f);
+    }
+
+    void RewardPlayer()
+    {
+        // Find the player and give them health
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.GainHealth(healthRewardOnDeath);
+
+                if (showDebugLogs)
+                {
+                    Debug.Log($"<color=green>[MONSTER] Player rewarded with {healthRewardOnDeath} health!</color>");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[MONSTER] Player has no PlayerHealth component!");
+            }
+        }
     }
 
     System.Collections.IEnumerator FreezeOnDeathAnimation(string deathAnimName)
