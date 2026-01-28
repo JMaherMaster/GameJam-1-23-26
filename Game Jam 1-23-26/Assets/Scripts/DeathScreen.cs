@@ -3,12 +3,21 @@ using UnityEngine.SceneManagement;
 
 public class DeathScreen : MonoBehaviour
 {
+    [Header("Scene Names")]
+    [Tooltip("Name of the main gameplay scene to restart to")]
+    [SerializeField] private string mainSceneName = "MainScene"; // Change this to match your scene name
+
     public void RestartGame()
     {
-        // Reload the current scene
+        // Always load the Main Scene (no matter what scene the player died in)
         // Cursor will be re-locked automatically when CharController_Motor starts
         Time.timeScale = 1f; // Reset time scale in case it was paused
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        // Load by scene name
+        SceneManager.LoadScene(mainSceneName);
+
+        // Alternative: Load by scene index (if you prefer)
+        // SceneManager.LoadScene(1); // Change to your main scene's build index
     }
 
     public void ReturnToMenu()

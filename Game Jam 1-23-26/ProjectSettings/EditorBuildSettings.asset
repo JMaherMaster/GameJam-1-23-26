@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/UFO.unity
     guid: 20fac236374454d41913d82f324b081e
   - enabled: 1
-    path: Assets/Scenes/Win Scene.unity
+    path: Assets/Scenes/Cutscene.unity
     guid: a7edce9582de2f94d8ef621aea0ea18f
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
