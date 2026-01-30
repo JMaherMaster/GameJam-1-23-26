@@ -1418,7 +1418,7 @@ MonoBehaviour:
   obstructionLayer:
     serializedVersion: 2
     m_Bits: 64
-  chaseSpeed: 8
+  chaseSpeed: 12
   walkSpeed: 5
   rotationSpeed: 10
   returnToStartThreshold: 0.5
@@ -2282,7 +2282,7 @@ MonoBehaviour:
   obstructionLayer:
     serializedVersion: 2
     m_Bits: 64
-  chaseSpeed: 8
+  chaseSpeed: 12
   walkSpeed: 5
   rotationSpeed: 10
   returnToStartThreshold: 0.5
@@ -4177,7 +4177,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9973223, z: -0, w: -0.07313225}
   m_LocalPosition: {x: 376.27, y: 1.032, z: 710.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 971541868}
@@ -10315,7 +10315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf95e38c8e71fc4baa81217cfe295f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 70
+  maxHealth: 100
   healthRewardOnDeath: 10
   showDebugLogs: 0
 --- !u!136 &1864534952
@@ -10388,16 +10388,16 @@ MonoBehaviour:
   obstructionLayer:
     serializedVersion: 2
     m_Bits: 64
-  chaseSpeed: 8
+  chaseSpeed: 12
   walkSpeed: 5
   rotationSpeed: 10
   returnToStartThreshold: 0.5
   attackRange: 3
   attackCooldown: 1.5
-  attackDamage: 15
+  attackDamage: 20
   attackAnimationLength: 1.5
   damageAtPercent: 0.45
-  hitstunDuration: 0.8
+  hitstunDuration: 0.6
   idleAnimationLength: 10
   showDebugInfo: 0
   showGizmos: 1
